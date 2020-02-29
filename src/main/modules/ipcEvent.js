@@ -43,14 +43,8 @@ export default function () {
 
   ipcMain.on('toggle-mini', (event, params) => {
     if (params.value) {
-      if (!global.miniWindow) {
-        global.mainWindow.setThumbarButtons([])
-        global.miniWindow = createMiniWindow(BrowserWindow)
-        global.storeState = params.storeState
-      }
-      global.mainWindow.hide()
       global.miniWindow.show()
-      global.miniWindow.focus()
+      global.mainWindow.hide()
     } else {
       global.miniWindow.hide()
       global.mainWindow.show()
@@ -161,8 +155,8 @@ export default function () {
 
   ipcMain.on('ondragstart', (event, e) => {
     event.sender.startDrag({
-      file: 'static/images/play.png',
-      icon: 'static/images/play.png'
+      file: 'images/play.png',
+      icon: 'images/play.png'
     })
   })
 
@@ -207,12 +201,14 @@ export default function () {
     updateWindow.close()
     updateWindow = null
   })
+
   ipcMain.on('toggle-updatewin', (event, data) => {
     if (!updateWindow) {
       updateWindow = createUpdateWindow(BrowserWindow)
+      updateWindow.show()
     } else {
       if (updateWindow.isVisible()) {
-        updateWindow.hide()
+        updateWindow.minimize()
       } else {
         updateWindow.show()
       }
